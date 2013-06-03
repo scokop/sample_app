@@ -1,8 +1,12 @@
 SampleApp::Application.routes.draw do
-  get "users/new"
-  resources :users
-  resources :sessions, only: [:new, :create, :destroy]
-  resources :microposts, only: [:create, :destroy]
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
+  resources :sessions,      only: [:new, :create, :destroy]
+  resources :microposts,    only: [:create, :destroy]
+  resources :relationships, only: [:create, :destroy]
   root to: 'static_pages#home'
   match '/signup',  to: 'users#new',            via: 'get'
   match '/signin',  to: 'sessions#new',         via: 'get'
@@ -15,7 +19,7 @@ SampleApp::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  # root to: 'welcome#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
